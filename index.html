@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的笔记本</title>
     <link rel="stylesheet" href="style.css">
+    <script src="markdown-parser.js"></script>
 </head>
 <body>
     <div class="container">
@@ -125,8 +126,50 @@ git push -u origin main</code></pre>
                         <p>不要使用中文、空格或特殊符号，否则生成的网址会很丑且容易出错。</p>
                     </div>
                 </section>
+                
+                <!-- 使用记录区域 -->
+                <section class="records-section">
+                    <h3>📝 我的使用记录</h3>
+                    <div id="recordsContainer">
+                        <!-- 静态记录 -->
+                        <div class="record-item">
+                            <div class="record-header">
+                                <span class="record-time">2026-01-30 07:04</span>
+                            </div>
+                            <div class="record-content">
+                                <h3>终端指定仓库地址失误的修改方法</h3>
+                                <p>场景一的3中</p>
+                                <pre><code>git remote add origin https://github.com/LuDengD/你的新仓库名.git</code></pre>
+                                <p>这里面如果新的仓库名设置错误可以通过这个指令进行修改</p>
+                                <pre><code>git remote set-url origin https://github.com/LuDengD/你的新仓库名.git</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </article>
         </main>
+    </div>
+    
+    <!-- 右下角浮动按钮 -->
+    <button id="addRecordBtn" class="floating-btn" title="添加使用记录">+</button>
+    
+    <!-- 添加记录弹窗 -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>添加使用记录</h2>
+            <form id="recordForm">
+                <div class="form-group">
+                    <label for="recordContent">记录内容（支持 Markdown 格式）：</label>
+                    <textarea id="recordContent" rows="8" required placeholder="支持 Markdown 语法：&#10;# 标题&#10;**粗体** *斜体*&#10;- 列表项&#10;`代码`&#10;[链接](url)&#10;等等..."></textarea>
+                    <small style="color: #999; margin-top: 0.5rem; display: block;">💡 提示：支持标题、粗体、斜体、代码、链接、列表等 Markdown 语法</small>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">保存记录</button>
+                    <button type="button" class="btn-secondary" id="cancelBtn">取消</button>
+                </div>
+            </form>
+        </div>
     </div>
     
     <script src="script.js"></script>
