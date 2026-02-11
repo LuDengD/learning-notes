@@ -283,10 +283,17 @@ document.addEventListener('DOMContentLoaded', function() {
     if (copyCommandBtn && commitMessageInput) {
         // 复制按钮功能 - 直接复制输入框的内容
         copyCommandBtn.addEventListener('click', async function() {
-            // 直接复制输入框中的内容，如果为空则复制默认命令
-            let textToCopy = commitMessageInput.value.trim();
+            const textToCopy = commitMessageInput.value.trim();
+            
+            // 如果输入框为空，显示提示
             if (!textToCopy) {
-                textToCopy = 'git add . ; git commit -m "这里写你的更新内容" ; git push';
+                copyCommandBtn.textContent = '输入框为空';
+                copyCommandBtn.classList.add('error');
+                setTimeout(() => {
+                    copyCommandBtn.textContent = '复制';
+                    copyCommandBtn.classList.remove('error');
+                }, 2000);
+                return;
             }
             
             try {
