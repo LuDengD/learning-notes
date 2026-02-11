@@ -274,4 +274,52 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(addCopyButtons, 100);
         });
     });
+    
+    // 一键推送命令更新功能
+    const copyCommandBtn = document.getElementById('copyCommand');
+    const pasteCommandBtn = document.getElementById('pasteCommand');
+    const commitMessageInput = document.getElementById('commitMessage');
+    
+    if (copyCommandBtn && commitMessageInput) {
+        // 复制按钮功能 - 直接复制输入框的内容
+        copyCommandBtn.addEventListener('click', async function() {
+            // 直接复制输入框中的内容，如果为空则复制默认命令
+            let textToCopy = commitMessageInput.value.trim();
+            if (!textToCopy) {
+                textToCopy = 'git add . ; git commit -m "这里写你的更新内容" ; git push';
+            }
+            
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+                copyCommandBtn.textContent = '已复制！';
+                copyCommandBtn.classList.add('success');
+                setTimeout(() => {
+                    copyCommandBtn.textContent = '复制';
+                    copyCommandBtn.classList.remove('success');
+                }, 2000);
+            } catch (err) {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制');
+            }
+        });
+        
+        // 粘贴按钮功能
+        if (pasteCommandBtn) {
+            pasteCommandBtn.addEventListener('click', async function() {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    commitMessageInput.value = text;
+                    pasteCommandBtn.textContent = '已粘贴！';
+                    pasteCommandBtn.classList.add('success');
+                    setTimeout(() => {
+                        pasteCommandBtn.textContent = '粘贴';
+                        pasteCommandBtn.classList.remove('success');
+                    }, 2000);
+                } catch (err) {
+                    console.error('粘贴失败:', err);
+                    // 静默失败，不显示提示
+                }
+            });
+        }
+    }
 });

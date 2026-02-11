@@ -93,9 +93,21 @@ git push -u origin main</code></pre>
                     <div class="step">
                         <h4>4. 一键推送</h4>
                         <p>如果你觉得三步太麻烦，可以用这个命令一次性完成：</p>
-                        <pre><code>git add . ; git commit -m "这里写你的更新内容" ; git push</code></pre>
-                        <p class="note">注：记得把"这里写你的更新内容"改成你实际修改的内容描述。</p>
+                        <div class="command-editor">
+                            <input type="text" id="commitMessage" placeholder="粘贴命令到这里，修改后复制">
+                            <button id="copyCommand" class="btn-action">复制</button>
+                            <button id="pasteCommand" class="btn-action">粘贴</button>
+                        </div>
+                        <pre><code id="oneClickCommand">git add . ; git commit -m "这里写你的更新内容" ; git push</code></pre>
+                        <p class="note">注：点击"粘贴"按钮将下面的命令粘贴到输入框，修改后点击"复制"按钮。</p>
                     </div>
+                </section>
+                
+                <section class="scenario">
+                    <h3>📋 查看最近 5 条记录（一行显示）</h3>
+                    <p><strong>用来查看之前上传更新的文本</strong></p>
+                    <p>这个命令最清晰，因为它把每次提交都压缩在一行里，你可以一眼扫过去，找到上一次出现的数字。</p>
+                    <pre><code>git log --oneline -n 5</code></pre>
                 </section>
                 
                 <section class="warnings">
