@@ -146,26 +146,58 @@ article h2 {
 }
 
 code {
-    background: #2d2d2d;
-    color: #f8f8f2;
+    background: #f4f4f4;
+    color: #e83e8c;
     padding: 0.2rem 0.5rem;
-    border-radius: 3px;
-    font-family: "Consolas", "Monaco", monospace;
+    border-radius: 4px;
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
     font-size: 0.9em;
+    border: 1px solid #e0e0e0;
 }
 
 pre {
     background: #2d2d2d;
     color: #f8f8f2;
-    padding: 1rem;
+    padding: 1.25rem;
     border-radius: 8px;
     overflow-x: auto;
-    margin: 1rem 0;
+    margin: 1.5rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+pre .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 6px 12px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+pre:hover .copy-btn {
+    opacity: 1;
+}
+
+pre .copy-btn:hover {
+    background: #764ba2;
+}
+
+pre .copy-btn.copied {
+    background: #4caf50;
 }
 
 pre code {
     background: none;
     padding: 0;
+    border: none;
+    color: #f8f8f2;
 }
 
 .note {
@@ -505,6 +537,238 @@ strong {
     background: #d0d0d0;
 }
 
+/* Markdown 扩展语法样式 */
+
+/* Markdown 内容区域样式 */
+.markdown-content {
+    line-height: 1.8;
+}
+
+.markdown-content h2 {
+    color: #667eea;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.markdown-content h3 {
+    color: #764ba2;
+    font-size: 1.2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.markdown-content p {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.markdown-content hr {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    margin: 2rem 0;
+}
+
+/* 代码示例区域 */
+.markdown-content p:has(code:only-child) {
+    background: #f8f9fa;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+    margin: 0.5rem 0;
+}
+
+/* 表格样式 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+table td {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    color: #555;
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+table tr:hover {
+    background: #f8f9fa;
+}
+
+/* 任务列表样式 */
+.task-item {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0.5rem;
+}
+
+.task-item input[type="checkbox"] {
+    margin-right: 0.75rem;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+/* 列表样式优化 */
+.markdown-content ul,
+.markdown-content ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+.markdown-content li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.markdown-content ul li {
+    list-style-type: disc;
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid #667eea;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    background: #f8f9fa;
+    color: #555;
+    font-style: italic;
+    border-radius: 4px;
+}
+
+/* 高亮文本 */
+mark {
+    background: linear-gradient(120deg, #ffeb3b 0%, #ffc107 100%);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-weight: 500;
+}
+
+/* 键盘按键样式 */
+kbd {
+    background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #adb5bd;
+    border-radius: 4px;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.1), inset 0 0 0 1px #fff;
+    padding: 0.2rem 0.5rem;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 0.85em;
+    color: #495057;
+    display: inline-block;
+    margin: 0 0.1rem;
+}
+
+/* 上标和下标 */
+sup {
+    font-size: 0.7em;
+    vertical-align: super;
+    color: #667eea;
+}
+
+sub {
+    font-size: 0.7em;
+    vertical-align: sub;
+    color: #667eea;
+}
+
+/* 数学公式样式 */
+.math-block {
+    display: block;
+    text-align: center;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    font-family: "Times New Roman", "KaTeX_Main", serif;
+    font-size: 1.3em;
+    color: #333;
+    border: 1px solid #dee2e6;
+}
+
+.math-inline {
+    font-family: "Times New Roman", "KaTeX_Main", serif;
+    font-style: italic;
+    color: #667eea;
+    font-weight: 500;
+}
+
+/* Mermaid 流程图容器 */
+.mermaid {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+/* Details/Summary 折叠样式 */
+details {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #667eea;
+    user-select: none;
+    padding: 0.25rem 0;
+    transition: color 0.3s;
+}
+
+summary:hover {
+    color: #764ba2;
+}
+
+details[open] summary {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* 脚注样式 */
+.footnote {
+    font-size: 0.9em;
+    color: #666;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 1rem;
+    margin-top: 2rem;
+}
+
+/* 居中内容 */
+div[align="center"] {
+    text-align: center;
+}
+
+/* 彩色文本支持 */
+span[style*="color"] {
+    font-weight: 500;
+}
+
 @media (max-width: 768px) {
     .container {
         grid-template-columns: 1fr;
@@ -532,4 +796,24 @@ strong {
         margin: 10% auto;
         padding: 1.5rem;
     }
+    
+    table {
+        font-size: 0.9em;
+    }
+    
+    table th,
+    table td {
+        padding: 0.5rem;
+    }
+    
+    .md-doc-content {
+        width: 100%;
+        min-height: 100vh;
+        margin: 2rem 0;
+    }
+    
+    .md-doc-content object {
+        display: block;
+    }
+}
 }

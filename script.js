@@ -2,6 +2,91 @@
 document.addEventListener('DOMContentLoaded', function() {
     let currentNoteId = 'github-deploy';
     
+    // 笔记配置 - 映射笔记ID到文件路径
+    const noteConfigs = {
+        'github-deploy': {
+            type: 'static', // 静态HTML内容
+            element: document.getElementById('github-deploy')
+        },
+        'markdown-syntax': {
+            type: 'static',
+            element: document.getElementById('markdown-syntax')
+        }
+    };
+    
+    // 加载并显示笔记内容
+    async function loadNoteContent(noteId) {
+        const config = noteConfigs[noteId];
+        const contentArea = document.querySelector('.content');
+        
+        if (!config) return;
+        
+        // 隐藏所有文章
+        document.querySelectorAll('.content > article').forEach(article => {
+            article.style.display = 'none';
+        });
+        
+        if (config.type === 'static') {
+            // 显示静态HTML内容
+            config.element.style.display = 'block';
+        } else if (config.type === 'embedded') {
+            // 显示内嵌Markdown内容
+            const contentDiv = config.element.querySelector('.markdown-content');
+            if (contentDiv && !contentDiv.innerHTML) {
+                contentDiv.innerHTML = parseMarkdown(config.content);
+            }
+            config.element.style.display = 'block';
+            
+            // 重新初始化 Mermaid 图表
+            if (typeof mermaid !== 'undefined') {
+                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            }
+        } else if (config.type === 'markdown') {
+            // 加载外部Markdown文件
+            try {
+                const response = await fetch(config.file);
+                const markdownText = await response.text();
+                const htmlContent = parseMarkdown(markdownText);
+                
+                // 隐藏所有静态文章
+                document.querySelectorAll('.content > article').forEach(article => {
+                    article.style.display = 'none';
+                });
+                
+                // 创建或更新动态文章容器
+                let dynamicArticle = document.getElementById(`dynamic-${noteId}`);
+                if (!dynamicArticle) {
+                    dynamicArticle = document.createElement('article');
+                    dynamicArticle.id = `dynamic-${noteId}`;
+                    contentArea.appendChild(dynamicArticle);
+                }
+                
+                dynamicArticle.innerHTML = `
+                    <h2>${config.title}</h2>
+                    <div class="markdown-content">${htmlContent}</div>
+                    <section class="records-section">
+                        <h3>📝 我的使用记录</h3>
+                        <div id="recordsContainer-${noteId}">
+                            <p style="color: #999; font-style: italic;">暂无记录，点击右下角按钮添加第一条记录吧！</p>
+                        </div>
+                    </section>
+                `;
+                dynamicArticle.style.display = 'block';
+                
+                // 重新初始化 Mermaid 图表
+                if (typeof mermaid !== 'undefined') {
+                    mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+                }
+            } catch (error) {
+                console.error('加载Markdown文件失败:', error);
+                alert('加载笔记失败，请检查文件是否存在');
+            }
+        }
+        
+        // 显示对应笔记的记录
+        displayRecords(noteId);
+    }
+    
     // 从本地存储加载记录
     function loadRecords(noteId) {
         const records = localStorage.getItem(`records-${noteId}`);
@@ -15,11 +100,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 显示记录
     function displayRecords(noteId) {
-        const recordsContainer = document.getElementById('recordsContainer');
+        // 尝试获取当前笔记的记录容器
+        let recordsContainer = document.getElementById(`recordsContainer-${noteId}`);
+        if (!recordsContainer) {
+            recordsContainer = document.getElementById('recordsContainer');
+        }
+        
+        if (!recordsContainer) return;
+        
         const dynamicRecords = loadRecords(noteId);
         
         // 获取静态记录（已经在 HTML 中的）
-        const staticRecords = recordsContainer.querySelectorAll('.record-item');
+        const staticRecords = recordsContainer.querySelectorAll('.record-item:not(.dynamic-record)');
         
         if (dynamicRecords.length === 0) {
             // 如果没有动态记录，保持静态记录显示
@@ -72,8 +164,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // 更新当前笔记ID
             currentNoteId = this.getAttribute('href').substring(1);
             
-            // 显示对应笔记的记录
-            displayRecords(currentNoteId);
+            // 加载笔记内容
+            loadNoteContent(currentNoteId);
         });
     });
     
@@ -135,5 +227,51 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // 初始化显示
-    displayRecords(currentNoteId);
+    loadNoteContent(currentNoteId);
+    
+    // 为所有代码块添加复制按钮
+    function addCopyButtons() {
+        document.querySelectorAll('pre code').forEach((codeBlock) => {
+            // 检查是否已经添加过按钮
+            if (codeBlock.parentElement.querySelector('.copy-btn')) {
+                return;
+            }
+            
+            const button = document.createElement('button');
+            button.className = 'copy-btn';
+            button.textContent = '复制';
+            
+            button.addEventListener('click', async () => {
+                const code = codeBlock.textContent;
+                try {
+                    await navigator.clipboard.writeText(code);
+                    button.textContent = '已复制！';
+                    button.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        button.textContent = '复制';
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    console.error('复制失败:', err);
+                    button.textContent = '复制失败';
+                    setTimeout(() => {
+                        button.textContent = '复制';
+                    }, 2000);
+                }
+            });
+            
+            codeBlock.parentElement.appendChild(button);
+        });
+    }
+    
+    // 页面加载时添加复制按钮
+    addCopyButtons();
+    
+    // 当切换笔记时重新添加复制按钮
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            setTimeout(addCopyButtons, 100);
+        });
+    });
 });

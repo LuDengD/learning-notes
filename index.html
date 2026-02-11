@@ -17,6 +17,7 @@
             <h2>笔记分类</h2>
             <ul>
                 <li><a href="#github-deploy" class="active">GitHub 部署流程</a></li>
+                <li><a href="#markdown-syntax">Markdown 语法文档</a></li>
                 <li><a href="#" class="disabled">更多笔记...</a></li>
             </ul>
         </nav>
@@ -88,6 +89,13 @@ git push -u origin main</code></pre>
                         <pre><code>git push</code></pre>
                         <p class="note">注：如果不报错，就说明成功了。等待 1-2 分钟刷新网页即可。</p>
                     </div>
+                    
+                    <div class="step">
+                        <h4>4. 一键推送</h4>
+                        <p>如果你觉得三步太麻烦，可以用这个命令一次性完成：</p>
+                        <pre><code>git add . && git commit -m "这里写你的更新内容" && git push</code></pre>
+                        <p class="note">注：记得把"这里写你的更新内容"改成你实际修改的内容描述。</p>
+                    </div>
                 </section>
                 
                 <section class="warnings">
@@ -127,6 +135,13 @@ git push -u origin main</code></pre>
                     </div>
                 </section>
                 
+                <section class="scenario">
+                    <h3>📋 查看最近 5 条记录（一行显示）</h3>
+                    <p><strong>用来查看之前上传更新的文本</strong></p>
+                    <p>这个命令最清晰，因为它把每次提交都压缩在一行里，你可以一眼扫过去，找到上一次出现的数字。</p>
+                    <pre><code>git log --oneline -n 5</code></pre>
+                </section>
+                
                 <!-- 使用记录区域 -->
                 <section class="records-section">
                     <h3>📝 我的使用记录</h3>
@@ -144,6 +159,24 @@ git push -u origin main</code></pre>
                                 <pre><code>git remote set-url origin https://github.com/LuDengD/你的新仓库名.git</code></pre>
                             </div>
                         </div>
+                    </div>
+                </section>
+            </article>
+            
+            <!-- Markdown 语法文档 -->
+            <article id="markdown-syntax" style="display: none;">
+                <h2>Markdown 语法代码文档</h2>
+                <p class="intro">这是一份全集 Markdown 语法代码文档，包含标准语法、GitHub 扩展语法 (GFM) 及常用的 HTML 补丁。我已严格按照日常使用频次从高到低进行了排序。</p>
+                
+                <div class="md-doc-content">
+                    <object data="md文档.html" type="text/html" style="width: 100%; height: 100vh; border: none;"></object>
+                </div>
+                
+                <!-- 使用记录区域 -->
+                <section class="records-section">
+                    <h3>📝 我的使用记录</h3>
+                    <div id="recordsContainer-markdown-syntax">
+                        <p style="color: #999; font-style: italic;">暂无记录，点击右下角按钮添加第一条记录吧！</p>
                     </div>
                 </section>
             </article>
@@ -172,6 +205,6 @@ git push -u origin main</code></pre>
         </div>
     </div>
     
-    <script src="script.js"></script>
+    <script src="script.js?v=13"></script>
 </body>
 </html>

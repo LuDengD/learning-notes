@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的笔记本</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="markdown-parser.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 我的笔记本</h1>
+        </header>
+        
+        <nav class="sidebar">
+            <h2>笔记分类</h2>
+            <ul>
+                <li><a href="#github-deploy" class="active">GitHub 部署流程</a></li>
+                <li><a href="#" class="disabled">更多笔记...</a></li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <article id="github-deploy">
+                <h2>GitHub 部署网站流程</h2>
+                <p class="intro">这份操作手册是专门为你定制的，涵盖了你目前在 Windows + VS Code + Clash 环境下的标准工作流。</p>
+                
+                <section class="scenario">
+                    <h3>🟢 场景一：部署一个全新的网站</h3>
+                    <p class="subtitle">（比如你以后要做的"贪吃蛇游戏"或"插画作品集"）</p>
+                    
+                    <div class="step">
+                        <h4>1. 本地准备</h4>
+                        <ul>
+                            <li>新建一个文件夹（英文命名，如 <code>snake-game</code>）</li>
+                            <li><strong>关键点：</strong> 必须在里面创建一个名为 <code>index.html</code> 的文件作为入口</li>
+                            <li>打开 PowerShell 进入该文件夹</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step">
+                        <h4>2. 初始化仓库（仅需做一次）</h4>
+                        <pre><code>git init
+git add .
+git commit -m "项目初始化"</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <h4>3. 云端创建 & 关联（仅需做一次）</h4>
+                        <p><strong>去 GitHub 网页：</strong></p>
+                        <ul>
+                            <li>创建新仓库（Create new repository），设为 Public，名字建议用英文</li>
+                        </ul>
+                        <p><strong>回 PowerShell：</strong> 运行以下命令（记得替换你的仓库地址）：</p>
+                        <pre><code>git branch -M main
+git remote add origin https://github.com/LuDengD/你的新仓库名.git
+git push -u origin main</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <h4>4. 开启网页服务</h4>
+                        <ul>
+                            <li>去 GitHub 仓库页面 → Settings → Pages</li>
+                            <li>Branch 选 <code>main</code> → Save</li>
+                            <li>等待 1 分钟，获取网址</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section class="scenario">
+                    <h3>🔵 场景二：修改旧网页代码</h3>
+                    <p class="subtitle">（比如你要更新理财表格数据，或者给日历加新角色）</p>
+                    <p>当你改完代码并保存（Ctrl+S）后，只需要在 PowerShell 运行"更新三部曲"：</p>
+                    
+                    <div class="step">
+                        <h4>1. 装箱（Add）</h4>
+                        <pre><code>git add .</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <h4>2. 记录（Commit）</h4>
+                        <pre><code>git commit -m "这里写你改了什么，比如：新增钟离生日数据"</code></pre>
+                    </div>
+                    
+                    <div class="step">
+                        <h4>3. 推送（Push）</h4>
+                        <pre><code>git push</code></pre>
+                        <p class="note">注：如果不报错，就说明成功了。等待 1-2 分钟刷新网页即可。</p>
+                    </div>
+                </section>
+                
+                <section class="warnings">
+                    <h3>⚠️ 核心注意事项（避坑指南）</h3>
+                    
+                    <div class="warning-item">
+                        <h4>1. 网络与代理（Clash 用户必看）</h4>
+                        <p>如果你在 <code>git push</code> 时遇到 <code>Recv failure</code> 或 <code>Connection reset</code>，99% 是代理没配置好。</p>
+                        <p><strong>检查方法：</strong> 确保 Clash 开着。</p>
+                        <p><strong>万能急救命令：</strong> 在推送前运行一次：</p>
+                        <pre><code>git config --global http.proxy http://127.0.0.1:7890</code></pre>
+                    </div>
+                    
+                    <div class="warning-item">
+                        <h4>2. "大门"文件 index.html</h4>
+                        <p>GitHub Pages 只认 <code>index.html</code>（全小写）。</p>
+                        <p>如果你把主页命名为 <code>home.html</code> 或 <code>Index.html</code>，打开网址会直接报 404 错误。</p>
+                    </div>
+                    
+                    <div class="warning-item">
+                        <h4>3. 缓存与延迟</h4>
+                        <ul>
+                            <li><strong>延迟：</strong> 推送成功后，GitHub 需要 1-3 分钟在后台部署。不要刚推完就去刷新，会以为没更新。</li>
+                            <li><strong>缓存：</strong> 浏览器很顽固，如果你确定过了很久还是旧内容，请按 <code>Ctrl + F5</code> 强制刷新。</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="warning-item">
+                        <h4>4. 隐私安全</h4>
+                        <p>如果你要公开网站（Public），千万不要把银行卡号、密码、API Key 等敏感信息写在代码或 Excel 表格里上传。</p>
+                    </div>
+                    
+                    <div class="warning-item">
+                        <h4>5. 仓库命名规范</h4>
+                        <p>推荐格式：<code>my-project-name</code>（全小写，用短横线连接）。</p>
+                        <p>不要使用中文、空格或特殊符号，否则生成的网址会很丑且容易出错。</p>
+                    </div>
+                </section>
+                
+                <!-- 使用记录区域 -->
+                <section class="records-section">
+                    <h3>📝 我的使用记录</h3>
+                    <div id="recordsContainer">
+                        <!-- 静态记录 -->
+                        <div class="record-item">
+                            <div class="record-header">
+                                <span class="record-time">2026-01-30 07:04</span>
+                            </div>
+                            <div class="record-content">
+                                <h3>终端指定仓库地址失误的修改方法</h3>
+                                <p>场景一的3中</p>
+                                <pre><code>git remote add origin https://github.com/LuDengD/你的新仓库名.git</code></pre>
+                                <p>这里面如果新的仓库名设置错误可以通过这个指令进行修改</p>
+                                <pre><code>git remote set-url origin https://github.com/LuDengD/你的新仓库名.git</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </article>
+            
+            <!-- Markdown 语法文档 -->
+            <article id="markdown-syntax" style="display: none;">
+                <div class="markdown-split-view">
+                    <div class="markdown-left">
+                        <img src="https://ludeng-huihua.pages.dev/file/qita/1770787339362_Markdown_语法代码文档.png" alt="Markdown 语法代码文档">
+                    </div>
+                    
+                    <div class="markdown-right">
+                        <h1>Markdown 语法代码文档</h1>
+                        <p class="intro">这是一份全集 Markdown 语法代码文档，包含标准语法、GitHub 扩展语法 (GFM) 及常用的 HTML 补丁。我已严格按照日常使用频次从高到低进行了排序。</p>
+                <div class="markdown-split-view">
+                    <div class="markdown-left">
+                        <img src="https://ludeng-huihua.pages.dev/file/qita/1770787339362_Markdown_语法代码文档.png" alt="Markdown 语法代码文档">
+                    </div>
+                    <div class="markdown-right">
+                        <h2>Markdown 语法代码文档</h2>
+                        <p class="intro">这是一份全集 Markdown 语法代码文档，包含标准语法、GitHub 扩展语法 (GFM) 及常用的 HTML 补丁。我已严格按照日常使用频次从高到低进行了排序。</p>
+                        
+                        <div class="section">
+                            <h2>1. 标题 (Headings)</h2>
+                            <h3>代码：</h3>
+                            <pre><code># 一级标题
+## 二级标题
+### 三级标题</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <pre><code># 项目说明书</code></pre>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="section">
+                            <h2>2. 加粗 (Bold)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>**文字**</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                这里的重点是 <strong>安全第一</strong>。
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>3. 无序列表 (Bullet Lists)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>- 列表项 (或 * )</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <ul>
+                                    <li>苹果</li>
+                                    <li>香蕉</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>4. 有序列表 (Ordered Lists)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>1. 列表项</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <ol>
+                                    <li>打开盖子</li>
+                                    <li>放入大象</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>5. 超链接 (Links)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>[显示文本](链接地址)</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <a href="https://baidu.com">百度</a>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>6. 图片 (Images)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>![描述](图片链接)</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <pre><code>![Logo](/img/logo.png)</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>7. 代码块 (Code Blocks)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>```python
+print("Hello")
+```</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                在三个反引号后写语言名（如 js, java）可高亮代码。
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>8. 行内代码 (Inline Code)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>`文字`</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                请按 <code>Ctrl+C</code> 复制。
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>9. 引用 (Blockquotes)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>&gt; 文字</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <blockquote style="border-left: 4px solid #dfe2e5; padding-left: 15px; color: #6a737d;">
+                                    注意：此操作不可逆。
+                                </blockquote>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>10. 任务列表 (Task Lists)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>- [x] 已完成
+- [ ] 待办</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                ☑ 已完成<br>
+                                ☐ 待办
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>11. 表格 (Tables)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>| 标题1 | 标题2 |
+| :--- | ---: |
+| 左对齐 | 右对齐 |</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <table style="border-collapse: collapse; width: 100%;">
+                                    <tr>
+                                        <th style="border: 1px solid #dfe2e5; padding: 8px; text-align: left;">姓名</th>
+                                        <th style="border: 1px solid #dfe2e5; padding: 8px; text-align: right;">年龄</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #dfe2e5; padding: 8px; text-align: left;">张三</td>
+                                        <td style="border: 1px solid #dfe2e5; padding: 8px; text-align: right;">18</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>12. 分割线 (Horizontal Rule)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>---</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                生成一条横线分割内容。
+                                <hr style="border: none; border-top: 1px solid #e1e4e8; margin: 10px 0;">
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>13. 删除线 (Strikethrough)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>~~文字~~</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                原价 <del>99元</del>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>14. 斜体 (Italic)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>*文字*</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <em>The Great Gatsby</em>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>15. 强制换行 (Break)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>&lt;br&gt;</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                第一行<br>第二行 (用于在表格或列表中换行)。
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>16. 数学公式 (Math)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>$$E=mc^2$$ (块级) 或 $E=mc^2$ (行内)</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <code>x = (-b ± √(b²-4ac)) / 2a</code>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>17. 流程图 (Mermaid)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>```mermaid
+graph TD;
+    A--&gt;B;
+```</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                自动生成 A 指向 B 的流程图。
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>18. 折叠详情 (Details)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>&lt;details&gt;
+  &lt;summary&gt;点击展开&lt;/summary&gt;
+  隐藏内容
+&lt;/details&gt;</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <details>
+                                    <summary style="cursor: pointer;">点击展开</summary>
+                                    <p style="margin-top: 10px;">用于隐藏长篇日志或答案。</p>
+                                </details>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>19. 脚注 (Footnotes)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>文本[^1]
+...
+[^1]: 注释</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                这是一个专有名词<sup>1</sup>。 (鼠标悬停或点击查看解释)
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>20. 锚点跳转 (Anchors)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>[跳转](#标题名)</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <a href="#1-标题-headings">回到顶部</a>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>21. 转义字符 (Escape)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>\ + 符号</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                \# (显示井号而不是标题)。
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>22. 居中/颜色 (HTML Style)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>&lt;div align="center"&gt;文字&lt;/div&gt;
+或
+&lt;span style="color:red"&gt;文字&lt;/span&gt;</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <div align="center">让图片或标题居中显示。</div>
+                                <span style="color:red">红色文字</span>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>23. 键盘键 (Keyboard Keys)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>&lt;kbd&gt;按键名&lt;/kbd&gt;</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                请按 <kbd>Enter</kbd> 键。
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>24. 上标/下标 (Sub/Sup)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>X^2^ (上标) / H~2~O (下标)</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                m<sup>2</sup> / H<sub>2</sub>O
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2>25. 高亮 (Highlight)</h2>
+                            <h3>代码：</h3>
+                            <pre><code>==文字==</code></pre>
+                            <h3>案例：</h3>
+                            <div class="example">
+                                <mark style="background: #fff3cd; padding: 2px 4px;">重点标记</mark> (注意：部分编辑器如 VSCode 需插件支持)。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 使用记录区域 -->
+                <section class="records-section">
+                    <h3>📝 我的使用记录</h3>
+                    <div id="recordsContainer-markdown-syntax">
+                        <p style="color: #999; font-style: italic;">暂无记录，点击右下角按钮添加第一条记录吧！</p>
+                    </div>
+                </section>
+            </article>
+        </main>
+    </div>
+    
+    <!-- 右下角浮动按钮 -->
+    <button id="addRecordBtn" class="floating-btn" title="添加使用记录">+</button>
+    
+    <!-- 添加记录弹窗 -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>添加使用记录</h2>
+            <form id="recordForm">
+                <div class="form-group">
+                    <label for="recordContent">记录内容（支持 Markdown 格式）：</label>
+                    <textarea id="recordContent" rows="8" required placeholder="支持 Markdown 语法：&#10;# 标题&#10;**粗体** *斜体*&#10;- 列表项&#10;`代码`&#10;[链接](url)&#10;等等..."></textarea>
+                    <small style="color: #999; margin-top: 0.5rem; display: block;">💡 提示：支持标题、粗体、斜体、代码、链接、列表等 Markdown 语法</small>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">保存记录</button>
+                    <button type="button" class="btn-secondary" id="cancelBtn">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="script.js?v=13"></script>
+</body>
+</html>
